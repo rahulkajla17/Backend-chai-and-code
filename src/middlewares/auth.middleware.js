@@ -9,19 +9,19 @@ export const jwtverify = asynchandler(async (req, res, next) => {
       req.cookies?.accesstoken ||
       req.header("Authorization")?.replace("Bearer", "");
 
-    console.log("1. TOKEN EXTRACTED: ", token);
+    // console.log("1. TOKEN EXTRACTED: ", token);
 
     if (!token) {
       throw new apiError(401, "unauthorized request : no token provided");
     }
     const decodedtoken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    console.log("2. TOKEN DECODED: ", decodedtoken);
+    // console.log("2. TOKEN DECODED: ", decodedtoken);
     const user = await User.findById(decodedtoken?._id)?.select(
       "-password -RefreshToken",
     );
 
-    console.log("3. USER FOUND IN DB: ", user);
+    // console.log("3. USER FOUND IN DB: ", user);
     if (!user) {
       throw new apiError(401, "Invalid Access Token : user does not exist");
     }
